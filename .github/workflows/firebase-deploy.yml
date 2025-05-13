@@ -1,0 +1,39 @@
+name: Firebase Deploy
+
+on:
+  workflow_call:
+    inputs:
+      channelId:
+        required: true
+        type: string
+      expires:
+        required: false
+        type: string
+        default: "7d"
+
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+      FIREBASE_SERVICE_ACCOUNT:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FIREBASE_PROJECT_ID: ""
+      FIREBASE_TARGET_SITE: ""
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ env.FIREBASE_PROJECT_ID }}
+          target: ${{ env.FIREBASE_TARGET_SITE }}
+          channelId: ${{ inputs.channelId }}
+          expires: ${{ inputs.expires }}

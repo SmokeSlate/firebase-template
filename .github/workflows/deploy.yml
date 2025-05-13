@@ -1,0 +1,19 @@
+name: Deploy to Firebase Live
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  call-deploy:
+    uses: ./.github/workflows/firebase-deploy.yml
+    with:
+      channelId: live
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

@@ -1,0 +1,22 @@
+# .github/workflows/deploy-preview.yml
+name: Deploy Firebase Preview
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  call-deploy:
+    uses: ./.github/workflows/firebase-deploy.yml
+    with:
+      channelId: pr-${{ github.event.number }}
+      expires: 14d
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
